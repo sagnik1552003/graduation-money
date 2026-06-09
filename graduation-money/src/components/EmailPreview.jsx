@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styles from './EmailPreview.module.css'
 
 export default function EmailPreview({ company, letter, profile, onClose, onRegen, onMarkSent }) {
+  const safeProfile = profile || {}
   const [copied, setCopied] = useState(false)
   const [addrCopied, setAddrCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('email') // email | mail
@@ -18,13 +19,81 @@ export default function EmailPreview({ company, letter, profile, onClose, onRege
     setTimeout(() => setAddrCopied(false), 2000)
   }
 
-  function downloadPhoto() {
-    if (!profile?.photo) return
-    const link = document.createElement('a')
-    link.href = profile.photo
-    link.download = `${(profile.photoCaption || 'graduation-photo').replace(/\s+/g, '-').toLowerCase()}.png`
-    link.click()
+function downloadPhoto() {
+  if (!safeProfile.photo) return
+
+  const img = new Image()
+  const src = safeProfile.photo instanceof File
+    ? URL.createObjectURL(safeProfile.photo)
+    : safeProfile.photo
+
+  img.onload = () => {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    const width = 900
+    const height = 1100
+    canvas.width = width
+    canvas.height = height
+
+    ctx.clearRect(0, 0, width, height)
+    ctx.fillStyle = '#fffdf8'
+    ctx.fillRect(0, 0, width, height)
+
+    const cardX = 110
+    const cardY = 80
+    const cardW = 680
+    const cardH = 860
+    const photoX = cardX + 38
+    const photoY = cardY + 38
+    const photoW = cardW - 76
+    const photoH = cardH - 160
+
+    ctx.save()
+    ctx.translate(width / 2, height / 2)
+    ctx.rotate(-0.03)
+    ctx.translate(-width / 2, -height / 2)
+
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.18)'
+    ctx.shadowBlur = 24
+    ctx.shadowOffsetY = 16
+    ctx.fillStyle = '#ffffff'
+    ctx.strokeStyle = '#ead9b6'
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.roundRect(cardX, cardY, cardW, cardH, 16)
+    ctx.fill()
+    ctx.stroke()
+    ctx.shadowBlur = 0
+    ctx.shadowOffsetY = 0
+
+    ctx.filter = 'sepia(0.10) contrast(1.08) saturate(1.03) brightness(1.02)'
+    ctx.drawImage(img, photoX, photoY, photoW, photoH)
+    ctx.filter = 'none'
+
+    ctx.fillStyle = '#2d2d2d'
+    ctx.textAlign = 'center'
+    ctx.font = '700 44px "Caveat", "Brush Script MT", cursive'
+    const caption = (safeProfile.photoCaption || 'Graduation photo attached').trim()
+    ctx.fillText(caption, width / 2, cardY + cardH - 32)
+    ctx.restore()
+
+    canvas.toBlob((blob) => {
+      if (!blob) return
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${caption.replace(/\s+/g, '-').toLowerCase() || 'graduation-photo'}.png`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
+      if (safeProfile.photo instanceof File) URL.revokeObjectURL(src)
+    }, 'image/png')
   }
+
+  img.onerror = () => console.error('Image load failed for download')
+  img.src = src
+}
 
   function openContactForm() {
     window.open(company.contactForm, '_blank')
@@ -58,7 +127,7 @@ export default function EmailPreview({ company, letter, profile, onClose, onRege
             <span className={styles.headerEmoji}>{company.emoji}</span>
             <div>
               <div className={styles.headerName}>{company.name}</div>
-              <div className={styles.headerSub}>AI-written · personalized for {profile.name}</div>
+              <div className={styles.headerSub}>AI-written · personalized for {safeProfile.name || 'your profile'}</div>
             </div>
           </div>
           <button className={styles.closeBtn} onClick={onClose}>×</button>
@@ -86,11 +155,11 @@ export default function EmailPreview({ company, letter, profile, onClose, onRege
                 ? <div className={styles.loading}>Writing your message<span className={styles.dots} /></div>
                 : <>
                     <pre className={styles.bodyText}>{letter.body}</pre>
-                    {profile?.photo && (
+                    {safeProfile.photo && (
                       <div className={styles.photoSection}>
                         <div className={styles.polaroidFrame}>
-                          <img src={profile.photo} alt="Graduation photo" className={`${styles.photoImage} ${styles.polaroidImage}`} />
-                          <p className={styles.photoCaption}>{profile.photoCaption?.trim() || 'Graduation photo attached'}</p>
+                          <img src={safeProfile.photo} alt="Graduation photo" className={`${styles.photoImage} ${styles.polaroidImage}`} />
+                          <p className={styles.photoCaption}>{safeProfile.photoCaption?.trim() || 'Graduation photo attached'}</p>
                         </div>
                         <button className={styles.downloadBtn} onClick={downloadPhoto}>Download photo</button>
                       </div>
@@ -133,11 +202,11 @@ export default function EmailPreview({ company, letter, profile, onClose, onRege
                 ? <div className={styles.loading}>Writing your letter<span className={styles.dots} /></div>
                 : <>
                     <pre className={styles.bodyText}>{letter.body}</pre>
-                    {profile?.photo && (
+                    {safeProfile.photo && (
                       <div className={styles.photoSection}>
                         <div className={styles.polaroidFrame}>
-                          <img src={profile.photo} alt="Graduation photo" className={`${styles.photoImage} ${styles.polaroidImage}`} />
-                          <p className={styles.photoCaption}>{profile.photoCaption?.trim() || 'Graduation photo attached'}</p>
+                          <img src={safeProfile.photo} alt="Graduation photo" className={`${styles.photoImage} ${styles.polaroidImage}`} />
+                          <p className={styles.photoCaption}>{safeProfile.photoCaption?.trim() || 'Graduation photo attached'}</p>
                         </div>
                         <button className={styles.downloadBtn} onClick={downloadPhoto}>Download photo</button>
                       </div>

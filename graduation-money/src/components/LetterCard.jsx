@@ -10,6 +10,9 @@ const STATUSES = [
 ];
 
 export default function LetterCard({ company, profile, status, onStatusChange }) {
+  const safeProfile = profile && typeof profile === 'object'
+    ? profile
+    : { name: '', degree: '', year: '', story: '', mailingAddress: '', photo: null, photoCaption: '', photoAttached: false };
   const [letter, setLetter] = useState('');
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
@@ -24,7 +27,7 @@ export default function LetterCard({ company, profile, status, onStatusChange })
     setLoading(true);
     setExpanded(true);
     try {
-      const text = await generateLetter({ company, profile, variant: v });
+      const text = await generateLetter({ company, profile: safeProfile, variant: v });
       setLetter(text);
       setGenerated(true);
     } catch (e) {

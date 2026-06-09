@@ -10,6 +10,9 @@ import styles from './Dashboard.module.css'
 const SELECTED_KEY = 'gm_selected'
 
 export default function Dashboard({ profile, onBack }) {
+  const safeProfile = profile && typeof profile === 'object'
+    ? profile
+    : { name: '', degree: '', year: '', story: '', mailingAddress: '', photo: null, photoCaption: '', photoAttached: false }
   const [selected, setSelected] = useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem(SELECTED_KEY) || '[]')) } catch { return new Set() }
   })
@@ -58,7 +61,7 @@ export default function Dashboard({ profile, onBack }) {
         setStatus(company.id, 'idle')
       }
       try {
-        const result = await generateLetter({ company, ...profile })
+        const result = await generateLetter({ company, profile: safeProfile })
         setLetters(prev => ({ ...prev, [company.id]: { ...result, loading: false, error: null } }))
       } catch {
         setLetters(prev => ({ ...prev, [company.id]: { subject: '', body: '', loading: false, error: 'Failed to generate.' } }))
@@ -74,7 +77,7 @@ export default function Dashboard({ profile, onBack }) {
     }
     setLetters(prev => ({ ...prev, [companyId]: { ...prev[companyId], loading: true, error: null } }))
     try {
-      const result = await generateLetter({ company, ...profile })
+      const result = await generateLetter({ company, profile: safeProfile })
       setLetters(prev => ({ ...prev, [companyId]: { ...result, loading: false, error: null } }))
     } catch {
       setLetters(prev => ({ ...prev, [companyId]: { ...prev[companyId], loading: false, error: 'Failed.' } }))
@@ -261,7 +264,7 @@ export default function Dashboard({ profile, onBack }) {
         <EmailPreview
           company={COMPANIES.find(c => c.id === previewId)}
           letter={letters[previewId]}
-          profile={profile}
+          profile={safeProfile}
           onClose={() => setPreviewId(null)}
           onRegen={() => regenLetter(previewId)}
           onMarkSent={() => { setStatus(previewId, 'contacted'); setPreviewId(null) }}
