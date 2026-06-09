@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "cd graduation-money && npm install && npm run build",
+  "buildCommand": "npm install && npm run build",
   "outputDirectory": "graduation-money/dist",
   "rewrites": [
     {
