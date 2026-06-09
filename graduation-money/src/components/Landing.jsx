@@ -46,7 +46,7 @@ export default function Landing({ onStart }) {
         <div className={styles.stats}>
           <div className={styles.stat}><span className={styles.statN}>$150+</span><span className={styles.statL}>per response</span></div>
           <div className={styles.stat}><span className={styles.statN}>85%</span><span className={styles.statL}>Chick-fil-A rate</span></div>
-          <div className={styles.stat}><span className={styles.statN}>15</span><span className={styles.statL}>verified brands</span></div>
+          <div className={styles.stat}><span className={styles.statN}>25+</span><span className={styles.statL}>verified brands</span></div>
         </div>
         <div className={styles.steps}>
           <div className={styles.step}><span className={styles.stepN}>01</span><span>Fill your details</span></div>
