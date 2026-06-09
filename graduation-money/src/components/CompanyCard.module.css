@@ -1,0 +1,38 @@
+.card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; cursor: pointer; transition: all 0.15s; position: relative; user-select: none; outline: none;
+}
+.card:hover { border-color: var(--border2); background: var(--bg3); }
+.card:focus-visible { border-color: var(--gold); }
+.selected { border-color: rgba(212,175,55,0.4) !important; background: rgba(212,175,55,0.03) !important; }
+.ready { border-color: rgba(212,175,55,0.6) !important; background: rgba(212,175,55,0.05) !important; cursor: pointer; }
+.ready:hover { border-color: var(--gold) !important; }
+.received { border-color: rgba(61,122,92,0.5) !important; }
+
+.top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.emoji { font-size: 24px; }
+.topRight { display: flex; align-items: center; }
+
+.check { width: 20px; height: 20px; border-radius: 50%; background: var(--gold); color: #0c0c0e; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: all 0.15s; }
+.checkVisible { opacity: 1; transform: scale(1); }
+
+.writing { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text3); letter-spacing: 0.06em; }
+.dots::after { content: '...'; animation: dots 1.2s infinite; }
+@keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+
+.readyDot { font-size: 10px; color: var(--gold); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
+
+.name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+.what { font-size: 11px; color: var(--text3); line-height: 1.5; margin-bottom: 12px; min-height: 30px; }
+
+.footer { display: flex; justify-content: space-between; align-items: center; }
+.conf { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; }
+.confHigh { background: rgba(61,122,92,0.15); color: #5baa82; }
+.confMed { background: rgba(212,175,55,0.08); color: #907020; }
+.value { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--text2); }
+
+.statusTag { position: absolute; top: 10px; right: 10px; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 20px; }
+.tag_contacted { background: rgba(212,175,55,0.12); color: var(--gold); }
+.tag_mailed { background: rgba(100,149,237,0.12); color: #6495ed; }
+.tag_waiting { background: rgba(200,150,50,0.15); color: #c89632; }
+.tag_received { background: rgba(61,122,92,0.2); color: #5baa82; }
