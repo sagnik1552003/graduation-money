@@ -83,6 +83,42 @@
 
 .statusSelect { background: var(--bg4); border: 1px solid var(--border); border-radius: 6px; color: var(--text2); font-size: 12px; padding: 5px 8px; outline: none; cursor: pointer; }
 
+/* Scholarships */
+.scholarshipGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 24px; }
+
+.loadingState, .errorState, .emptyState { 
+  display: flex; flex-direction: column; align-items: center; gap: 16px; 
+  padding: 60px 0; color: var(--text3); font-size: 14px; text-align: center; 
+}
+
+.errorState { color: #ff6b6b; }
+
+.retryBtn { 
+  padding: 10px 20px; background: var(--bg3); border: 1px solid var(--border); 
+  border-radius: 8px; color: var(--text2); font-size: 13px; transition: all 0.2s; cursor: pointer;
+}
+
+.retryBtn:hover { border-color: var(--border2); color: var(--text); }
+
+.resultsHeader { 
+  display: flex; align-items: center; justify-content: space-between; 
+  margin: 24px 0 16px; padding-bottom: 12px; 
+  border-bottom: 1px solid var(--border);
+}
+
+.resultsTitle { 
+  font-family: 'DM Serif Display', serif; font-size: 20px; 
+  color: var(--text); margin: 0; 
+}
+
+.clearBtn { 
+  padding: 8px 16px; background: transparent; border: 1px solid var(--border); 
+  border-radius: 8px; color: var(--text3); font-size: 12px; cursor: pointer; 
+  transition: all 0.15s; 
+}
+
+.clearBtn:hover { background: var(--bg3); color: var(--text); }
+
 .sentList { display: grid; gap: 16px; }
 .sentCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
 .sentHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 14px; }

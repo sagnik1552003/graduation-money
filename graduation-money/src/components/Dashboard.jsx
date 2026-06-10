@@ -2,8 +2,11 @@ import { useState, useMemo } from 'react'
 import { COMPANIES, CATEGORIES } from '../data/companies'
 import { useTracker } from '../hooks/useTracker'
 import { useLetters } from '../hooks/useLetters'
+import { useScholarships } from '../hooks/useScholarships'
 import { generateLetter } from '../utils/generateLetter'
 import CompanyCard from './CompanyCard'
+import ScholarshipCard from './ScholarshipCard'
+import ScholarshipSearch from './ScholarshipSearch'
 import EmailPreview from './EmailPreview'
 import styles from './Dashboard.module.css'
 
@@ -22,6 +25,7 @@ export default function Dashboard({ profile, onBack }) {
   const [previewId, setPreviewId] = useState(null)
   const [view, setView] = useState('pick')
   const { setStatus, getStatus, getSentCount, getReceivedCount } = useTracker()
+  const { scholarships, loading, error, searchParams, searchScholarships, clearScholarships } = useScholarships()
 
   function handleBack() {
     clearLetters()
@@ -98,6 +102,7 @@ export default function Dashboard({ profile, onBack }) {
         <div className={styles.navTitle}>graduation.money</div>
         <div className={styles.navRight}>
           <button className={`${styles.tabBtn} ${view === 'pick' ? styles.tabActive : ''}`} onClick={() => setView('pick')}>Brands</button>
+          <button className={`${styles.tabBtn} ${view === 'scholarships' ? styles.tabActive : ''}`} onClick={() => setView('scholarships')}>Scholarships</button>
           <button className={`${styles.tabBtn} ${view === 'sent' ? styles.tabActive : ''}`} onClick={() => setView('sent')}>
             Sent {sentCompanies.length > 0 && <span className={styles.tabBadge}>{sentCompanies.length}</span>}
           </button>
@@ -163,6 +168,65 @@ export default function Dashboard({ profile, onBack }) {
                     {generating ? 'Writing…' : 'Generate messages →'}
                   </button>
               }
+            </div>
+          )}
+        </div>
+      )}
+
+      {view === 'scholarships' && (
+        <div className={styles.main}>
+          <div className={styles.header}>
+            <div>
+              <h2 className={styles.title}>Find Scholarships</h2>
+              <p className={styles.subtitle}>Search for scholarships based on your graduation year and field of study.</p>
+            </div>
+          </div>
+
+          <ScholarshipSearch 
+            profile={safeProfile}
+            onSearch={searchScholarships}
+          />
+
+          {loading && (
+            <div className={styles.loadingState}>
+              <p>Searching scholarships...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className={styles.errorState}>
+              <p>{error}</p>
+              <button className={styles.retryBtn} onClick={() => searchScholarships(searchParams)}>Try again</button>
+            </div>
+          )}
+
+          {!loading && !error && scholarships.length > 0 && (
+            <div className={styles.resultsHeader}>
+              <h3 className={styles.resultsTitle}>{scholarships.length} scholarships found</h3>
+              <button className={styles.clearBtn} onClick={clearScholarships}>Clear results</button>
+            </div>
+          )}
+
+          {!loading && !error && scholarships.length === 0 && (searchParams.gradYear || searchParams.subject) && (
+            <div className={styles.emptyState}>
+              <p>No scholarships found matching your criteria. Try adjusting your search parameters.</p>
+            </div>
+          )}
+
+          {!loading && !error && scholarships.length > 0 && (
+            <div className={styles.scholarshipGrid}>
+              {scholarships.map(scholarship => (
+                <ScholarshipCard
+                  key={scholarship.id}
+                  scholarship={scholarship}
+                />
+              ))}
+            </div>
+          )}
+
+          {!loading && !error && scholarships.length === 0 && !(searchParams.gradYear || searchParams.subject) && (
+            <div className={styles.emptyState}>
+              <p>Enter your graduation year and field of study to find relevant scholarships.</p>
             </div>
           )}
         </div>
