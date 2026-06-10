@@ -103,11 +103,11 @@ function downloadPhoto() {
       return
     }
 
-    const popup = window.open(contactUrl, '_blank', 'noopener,noreferrer')
-
-    if (!popup) {
-      window.location.assign(contactUrl)
-    }
+    const link = document.createElement('a')
+    link.href = contactUrl
+    link.target = '_blank'
+    link.rel = 'noopener noreferrer'
+    link.click()
 
     onMarkSent()
   }
