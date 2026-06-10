@@ -73,8 +73,8 @@ export default function Landing({ onStart, onResume }) {
     <div className={styles.wrap}>
       <div className={styles.left}>
         <div className={styles.eyebrow}>GradGrabs</div>
-        <h1 className={styles.headline}>Your diploma<br /><em>opens wallets.</em></h1>
-        <p className={styles.sub}>Brands love graduates. Mail or email your announcement to the right companies — we write every letter for you, personalized and ready to send.</p>
+        <h1 className={styles.headline}>Your diploma gets you<br /><em>more than a degree.</em></h1>
+        <p className={styles.sub}>Many companies are happy to celebrate new graduates with gifts, discounts, and rewards. The problem is that there's no easy way to know which companies participate or how to reach them. We solve that by curating opportunities and generating personalized outreach emails that are ready to send.</p>
         <div className={styles.stats}>
           <div className={styles.stat}><span className={styles.statN}>$150+</span><span className={styles.statL}>per response</span></div>
           <div className={styles.stat}><span className={styles.statN}>85%</span><span className={styles.statL}>Chick-fil-A rate</span></div>
