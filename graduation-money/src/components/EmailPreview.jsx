@@ -96,7 +96,19 @@ function downloadPhoto() {
 }
 
   function openContactForm() {
-    window.open(company.contactForm, '_blank')
+    const contactUrl = company?.contactForm
+
+    if (!contactUrl) {
+      onMarkSent()
+      return
+    }
+
+    const popup = window.open(contactUrl, '_blank', 'noopener,noreferrer')
+
+    if (!popup) {
+      window.location.assign(contactUrl)
+    }
+
     onMarkSent()
   }
 
