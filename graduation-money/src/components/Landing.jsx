@@ -82,8 +82,8 @@ export default function Landing({ onStart }) {
           </div>
 
           <div className={styles.field}>
-            <label>Why you love any of these brands <span className={styles.opt}>— optional, makes emails feel real</span></label>
-            <textarea value={story} onChange={e => setStory(e.target.value)} placeholder="e.g. I've eaten Chick-fil-A every week since high school..." rows={3} />
+            <label>Why you love any of these brands (write a generic answer) <span className={styles.opt}>— optional, makes emails feel real</span></label>
+            <textarea value={story} onChange={e => setStory(e.target.value)} placeholder="e.g. your product has helped me understand myself..." rows={3} />
           </div>
 
           <div className={styles.field}>

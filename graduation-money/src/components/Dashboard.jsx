@@ -19,6 +19,7 @@ export default function Dashboard({ profile, onBack }) {
   const [activeCategory, setActiveCategory] = useState('All')
   const { letters, setLetters, clearLetters } = useLetters()
   const [generating, setGenerating] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [previewId, setPreviewId] = useState(null)
   const [view, setView] = useState('pick')
   const { setStatus, getStatus, getSentCount, getReceivedCount } = useTracker()
@@ -27,6 +28,11 @@ export default function Dashboard({ profile, onBack }) {
     clearLetters()
     localStorage.removeItem(SELECTED_KEY)
     onBack()
+  }
+
+  function openView(nextView) {
+    setView(nextView)
+    setMenuOpen(false)
   }
 
   const filtered = useMemo(() =>
@@ -96,12 +102,13 @@ export default function Dashboard({ profile, onBack }) {
       <nav className={styles.nav}>
         <button className={styles.backBtn} onClick={handleBack}>← back</button>
         <div className={styles.navTitle}>graduation.money</div>
-        <div className={styles.navRight}>
-          <button className={`${styles.tabBtn} ${view === 'pick' ? styles.tabActive : ''}`} onClick={() => setView('pick')}>Brands</button>
-          <button className={`${styles.tabBtn} ${view === 'sent' ? styles.tabActive : ''}`} onClick={() => setView('sent')}>
+        <button className={styles.menuToggle} onClick={() => setMenuOpen(v => !v)} aria-label="Toggle navigation menu">☰</button>
+        <div className={`${styles.navRight} ${menuOpen ? styles.navRightOpen : ''}`}>
+          <button className={`${styles.tabBtn} ${view === 'pick' ? styles.tabActive : ''}`} onClick={() => openView('pick')}>Brands</button>
+          <button className={`${styles.tabBtn} ${view === 'sent' ? styles.tabActive : ''}`} onClick={() => openView('sent')}>
             Sent {sentCompanies.length > 0 && <span className={styles.tabBadge}>{sentCompanies.length}</span>}
           </button>
-          <button className={`${styles.tabBtn} ${view === 'tracker' ? styles.tabActive : ''}`} onClick={() => setView('tracker')}>
+          <button className={`${styles.tabBtn} ${view === 'tracker' ? styles.tabActive : ''}`} onClick={() => openView('tracker')}>
             Tracker {trackedCompanies.length > 0 && <span className={styles.tabBadge}>{trackedCompanies.length}</span>}
           </button>
         </div>
