@@ -72,7 +72,7 @@ export default function Landing({ onStart, onResume }) {
   return (
     <div className={styles.wrap}>
       <div className={styles.left}>
-        <div className={styles.eyebrow}>graduation.money</div>
+        <div className={styles.eyebrow}>GradGrabs</div>
         <h1 className={styles.headline}>Your diploma<br /><em>opens wallets.</em></h1>
         <p className={styles.sub}>Brands love graduates. Mail or email your announcement to the right companies — we write every letter for you, personalized and ready to send.</p>
         <div className={styles.stats}>

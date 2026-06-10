@@ -101,7 +101,7 @@ export default function Dashboard({ profile, onBack }) {
     <div className={styles.wrap}>
       <nav className={styles.nav}>
         <button className={styles.backBtn} onClick={handleBack}>← back</button>
-        <div className={styles.navTitle}>graduation.money</div>
+        <div className={styles.navTitle}>GradGrabs</div>
         <button className={styles.menuToggle} onClick={() => setMenuOpen(v => !v)} aria-label="Toggle navigation menu">☰</button>
         <div className={`${styles.navRight} ${menuOpen ? styles.navRightOpen : ''}`}>
           <button className={`${styles.tabBtn} ${view === 'pick' ? styles.tabActive : ''}`} onClick={() => openView('pick')}>Brands</button>
