@@ -62,6 +62,20 @@
 
 .error { font-size: 12px; color: #e05c5c; }
 
+.backToBrandsBtn {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text2);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
 .btn {
   padding: 12px 20px; background: var(--gold); color: #0c0c0e;
   border: none; border-radius: 8px; font-size: 14px; font-weight: 500;

@@ -36,3 +36,18 @@
 .tag_mailed { background: rgba(100,149,237,0.12); color: #6495ed; }
 .tag_waiting { background: rgba(200,150,50,0.15); color: #c89632; }
 .tag_received { background: rgba(61,122,92,0.2); color: #5baa82; }
+
+
+
+.logoEmoji {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.logoImg {
+  border-radius: 8px;
+  object-fit: contain;
+  background: #fff;
+  padding: 2px;
+  flex-shrink: 0;
+}

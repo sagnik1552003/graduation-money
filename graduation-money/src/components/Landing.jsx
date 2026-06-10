@@ -1,17 +1,49 @@
-import { useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import styles from './Landing.module.css'
 
-export default function Landing({ onStart }) {
-  const [name, setName] = useState('')
-  const [degree, setDegree] = useState('')
-  const [year, setYear] = useState('2026')
-  const [mailingAddress, setMailingAddress] = useState('')
-  const [story, setStory] = useState('')
+const PROFILE_DRAFT_KEY = 'gm_profile_draft'
+
+export default function Landing({ onStart, onResume }) {
+  const [name, setName] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}').name || '' } catch { return '' }
+  })
+  const [degree, setDegree] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}').degree || '' } catch { return '' }
+  })
+  const [year, setYear] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}').year || '2026' } catch { return '2026' }
+  })
+  const [mailingAddress, setMailingAddress] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}').mailingAddress || '' } catch { return '' }
+  })
+  const [story, setStory] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}').story || '' } catch { return '' }
+  })
   const [photo, setPhoto] = useState(null)
-  const [photoCaption, setPhotoCaption] = useState('')
-  const [photoName, setPhotoName] = useState('')
+  const [photoCaption, setPhotoCaption] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}').photoCaption || '' } catch { return '' }
+  })
+  const [photoName, setPhotoName] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}').photoName || '' } catch { return '' }
+  })
   const [error, setError] = useState('')
   const fileRef = useRef()
+
+  const hasDraft = Boolean(name.trim() || degree.trim() || mailingAddress.trim() || story.trim() || photoCaption.trim() || photoName.trim())
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(PROFILE_DRAFT_KEY, JSON.stringify({
+        name: name.trim(),
+        degree: degree.trim(),
+        year: year.trim(),
+        mailingAddress: mailingAddress.trim(),
+        story: story.trim(),
+        photoCaption: photoCaption.trim(),
+        photoName,
+      }))
+    } catch {}
+  }, [name, degree, year, mailingAddress, story, photoCaption, photoName])
 
   function handlePhoto(e) {
     const file = e.target.files[0]
@@ -58,6 +90,11 @@ export default function Landing({ onStart }) {
 
       <div className={styles.right}>
         <form className={styles.form} onSubmit={handleSubmit}>
+          {hasDraft && (
+            <button type="button" className={styles.backToBrandsBtn} onClick={onResume}>
+              Back to brands →
+            </button>
+          )}
           <div className={styles.formTitle}>Tell us about you</div>
 
           <div className={styles.row2}>
@@ -103,7 +140,9 @@ export default function Landing({ onStart }) {
           </div>
 
           {error && <p className={styles.error}>{error}</p>}
-          <button type="submit" className={styles.btn}>Pick my brands →</button>
+          <button type="submit" className={styles.btn}>
+            {hasDraft ? 'Pick with new details →' : 'Pick my brands →'}
+          </button>
         </form>
       </div>
     </div>

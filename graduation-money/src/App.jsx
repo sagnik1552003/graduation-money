@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard'
 import './App.css'
 
 const PROFILE_KEY = 'gm_profile'
+const PROFILE_DRAFT_KEY = 'gm_profile_draft'
 
 // safe default profile (IMPORTANT)
 const DEFAULT_PROFILE = {
@@ -36,11 +37,32 @@ export default function App() {
 
     try {
       localStorage.setItem(PROFILE_KEY, JSON.stringify(toSave))
+      localStorage.setItem(PROFILE_DRAFT_KEY, JSON.stringify({
+        ...safeProfile,
+        photo: null,
+        photoName: profileData.photoName || ''
+      }))
     } catch (err) {
       console.warn('localStorage save failed:', err)
     }
 
     setProfile(safeProfile)
+  }
+
+  function handleResume() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(PROFILE_DRAFT_KEY) || '{}')
+      if (!saved || !saved.name) return
+      const safeProfile = {
+        ...DEFAULT_PROFILE,
+        ...saved,
+        photo: null,
+      }
+      localStorage.setItem(PROFILE_KEY, JSON.stringify({ ...safeProfile, photo: null }))
+      setProfile(safeProfile)
+    } catch (err) {
+      console.warn('resume failed:', err)
+    }
   }
 
   function handleBack() {
@@ -51,7 +73,7 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
       {!profile ? (
-        <Landing onStart={handleStart} />
+        <Landing onStart={handleStart} onResume={handleResume} />
       ) : (
         <Dashboard
           profile={profile}

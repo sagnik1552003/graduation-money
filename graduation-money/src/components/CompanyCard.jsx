@@ -1,4 +1,26 @@
+import { useState } from 'react'
 import styles from './CompanyCard.module.css'
+
+function CompanyLogo({ domain, name, emoji, size = 40 }) {
+  const [failed, setFailed] = useState(false)
+
+  if (failed) {
+    return (
+      <span className={styles.logoEmoji}>{emoji}</span>
+    )
+  }
+
+  return (
+    <img
+      src={`https://logos.hunter.io/${domain}`}
+      alt={name}
+      width={size}
+      height={size}
+      onError={() => setFailed(true)}
+      className={styles.logoImg}
+    />
+  )
+}
 
 export default function CompanyCard({ company, selected, status, letter, onToggle, onPreview }) {
   const hasLetter = letter?.body && !letter?.loading
@@ -6,14 +28,8 @@ export default function CompanyCard({ company, selected, status, letter, onToggl
   const isReady = hasLetter && status !== 'contacted'
 
   function handleClick() {
-    if (selected) {
-      onToggle()
-      return
-    }
-    if (isReady) {
-      onPreview()
-      return
-    }
+    if (selected) { onToggle(); return }
+    if (isReady) { onPreview(); return }
     onToggle()
   }
 
@@ -33,7 +49,7 @@ export default function CompanyCard({ company, selected, status, letter, onToggl
       title={title}
     >
       <div className={styles.top}>
-        <span className={styles.emoji}>{company.emoji}</span>
+        <CompanyLogo domain={company.domain} name={company.name} emoji={company.emoji} size={40} />
         <div className={styles.topRight}>
           {isLoading && <span className={styles.writing}>writing<span className={styles.dots} /></span>}
           {isReady && <span className={styles.readyDot}>● ready</span>}
