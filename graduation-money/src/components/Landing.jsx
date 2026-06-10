@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import styles from './Landing.module.css'
 
 const PROFILE_DRAFT_KEY = 'gm_profile_draft'
+const HAS_VISITED_DASHBOARD_KEY = 'gm_has_visited_dashboard'
 
 export default function Landing({ onStart, onResume }) {
   const [name, setName] = useState(() => {
@@ -28,8 +29,12 @@ export default function Landing({ onStart, onResume }) {
   })
   const [error, setError] = useState('')
   const fileRef = useRef()
+  const [hasVisitedDashboard, setHasVisitedDashboard] = useState(() => {
+    try { return localStorage.getItem(HAS_VISITED_DASHBOARD_KEY) === 'true' } catch { return false }
+  })
 
   const hasDraft = Boolean(name.trim() || degree.trim() || mailingAddress.trim() || story.trim() || photoCaption.trim() || photoName.trim())
+  const showBackToBrands = hasDraft && hasVisitedDashboard
 
   useEffect(() => {
     try {
@@ -90,7 +95,7 @@ export default function Landing({ onStart, onResume }) {
 
       <div className={styles.right}>
         <form className={styles.form} onSubmit={handleSubmit}>
-          {hasDraft && (
+          {showBackToBrands && (
             <button type="button" className={styles.backToBrandsBtn} onClick={onResume}>
               Back to brands →
             </button>
@@ -141,7 +146,7 @@ export default function Landing({ onStart, onResume }) {
 
           {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.btn}>
-            {hasDraft ? 'Pick with new details →' : 'Pick my brands →'}
+            {showBackToBrands ? 'Pick with new details →' : 'Pick my brands →'}
           </button>
         </form>
       </div>

@@ -5,6 +5,7 @@ import './App.css'
 
 const PROFILE_KEY = 'gm_profile'
 const PROFILE_DRAFT_KEY = 'gm_profile_draft'
+const HAS_VISITED_DASHBOARD_KEY = 'gm_has_visited_dashboard'
 
 // safe default profile (IMPORTANT)
 const DEFAULT_PROFILE = {
@@ -42,6 +43,7 @@ export default function App() {
         photo: null,
         photoName: profileData.photoName || ''
       }))
+      localStorage.setItem(HAS_VISITED_DASHBOARD_KEY, 'true')
     } catch (err) {
       console.warn('localStorage save failed:', err)
     }
@@ -59,6 +61,7 @@ export default function App() {
         photo: null,
       }
       localStorage.setItem(PROFILE_KEY, JSON.stringify({ ...safeProfile, photo: null }))
+      localStorage.setItem(HAS_VISITED_DASHBOARD_KEY, 'true')
       setProfile(safeProfile)
     } catch (err) {
       console.warn('resume failed:', err)
